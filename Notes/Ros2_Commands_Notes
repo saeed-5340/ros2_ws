@@ -1,0 +1,276 @@
+# After successfully install ros 2 for webside you need to add source file globally. If you not add that then you need to define souce file every time before excuate ros files. For adding source file globally we need to edit .bashrc file.
+	Type command (>> gedit .bashrc )
+then add source file path ( Ex : source /opt/ros/humble/setup.bash ) below these file and save that.After that you excute files from global command window.
+
+
+
+
+
+
+
+
+
+
+
+1. First you need to create a new folder which one use as Workspace folder.
+(>> mkdir ros2_ws
+>> cd ros2_ws
+>> mkdir scr)
+
+2. >> Colcon build --symlink-install (This command is for create /install,/log,/build file). --->(don't need to type if you use 4.2 command)
+2. >> source install/setup.bash
+3. >> (cd scr/)
+4. Now you can create ros2 packages infinite time (create how many you needed)
+
+	4.1  If you create your own package ( >> ros2 pkg create --build-type  ament_cmake <package_name> (like - my_package, pk1,pk2 etc)
+		OR,
+	4.2  If you create your own package ( >> ros2 pkg create <package_name> --build-type  ament_cmake --dependencies rclpy) 
+	     
+	     											 |
+	     											 |     -----> ament_cmake (for create C++)
+	     											 |     |
+	     											 ----->|
+	     											       |
+	     											       ------> ament_python(for create python)
+	 
+	     											       
+	4.2  If you use any in bulid package from online then ( >> git clone <package URL>)
+	4.3  If you want to create package inside the package then create a folder in source(scr) folder (>> mkdir pk4
+	>> cd pk4
+	>> ros2 pkg create --build-type  ament_cmake <package_name> (like - my_package, pk1,pk2 etc.)  ### after createing folder do the same thing for createing package ( that means repeat point 4.1,4.2) 
+	
+    
+    
+        Workspace (ex :  Folder test_ws work as a workspace )  
+        
+  	---------------------------------------------------------
+	| -------------	    ------------	------------	|
+	| |  pk1       |    |	pk2	|	|   pk3     |	|
+	| | 	       |    |		|       |           |	|
+	| -------------	    ------------	------------	|
+	|							|
+	| ----------------------------------------------------  |     
+	| |  ------------   -------------       ------------  | |					
+	| |  |	pk4.1	|   |	pk4.2	|	|  pk4.3   |  | |
+	| |  |		|   |		|	|          |  | |
+	| |  |		|   |		|	|          |  | |
+        | |  ------------   -------------       ------------  | |
+	| |						      |	|
+	| ----------------------------------------------------	|
+	|		package inside the package	        |
+	--------------------------------------------------------- 
+	
+	
+5. After Createing all packages now to compile your packages and apply updates using 
+    (>> colcon build --symlink-install) this command. if you use 4.1 command.
+    use this command in main workspace ( test_ws )
+
+6.  After Createing all packages now to compile your packages and apply updates using 
+    (>> colcon build ) this command. if you use 4.2 command.
+    use this command in main workspace ( test_ws )
+    
+    
+    Importent : Create a python file in use ( >> touch <fie_name> ) ---> (ex : touch my_package.py)
+    		Makes the file executable (runnable) in ROS you need to use  (chmod +x <file_name>) ---> ( ex : chmod +x my_package.py)
+    		If you not use ( >> chmod +x <file_name> ) ROS will denied your permission for executing this file.
+    		
+    		
+    		
+    		
+ 
+ 
+--------------------------------------------------------Node-------------------------------------------------------------
+
+Node --> A Node is a fundamental unit in ROS 2 that performs computation. (Is a fundamental point where someone can publish or subscribe a
+									    topic.)
+
+It can be configured to publish messages, subscribe to topics, or both. Each node is responsible for executing a specific task within a ROS system (e.g., sensor reading, data processing, controlling a robot).
+
+
+
+For creating node for using these node let's introduce with some command:
+
+>> ros2 run my_package test_node
+
+	{  test_node is the executable name. it's obviously written inside  setup.py file.
+		
+		inside setup.py file you will see console_scripts. you need to put executable name with package and file name.
+		ex:   setup.py -------> 'console_scripts': [
+								"test_node = my_package.my_node:main"
+							   ]
+								# "executable_name = <package_name>.<file_name>:<function>" 
+		
+		>> ros2 run my_package test_node { this only run when test_node is add inside console_scripts }
+	}
+ 
+>> saeed@saeed-DCJ503:~/Documents/vscode/ros2_ws/scr/my_package/my_package$ ./my_node.py 
+     
+     { you can run menually from destination file }
+ 
+ 
+{ To get node Information after run one node}
+
+    
+>> rqt_graph
+
+>> ros2 node list
+
+>> ros2 node info /<node_name>
+    
+    { ex: ros2 node info /first_node }   
+ 
+ 
+ 
+-----------------------------------------------topic-------------------------------------------
+
+Topic --> A Topic is a named communication channel in ROS used for message passing between nodes.
+ 
+ First Cheak demo
+ 	
+ 	terminal-1						terminal-2				terminal-3
+ 	
+ >> ros2 run demo_nodes_cpp talker			>> ros2 run demo_nodes_cpp listener           >> rqt_graph
+ 													   |
+ >> ros2 run turtlesim turtlesim_node			>> ros2 run turtlesim turtle_teleop_key            |
+ 													{ talker --> chatter ---> listener
+ 													
+ 													# node-1 --> topic ------> node-2}
+ 													
+>> ros2 topic list
+
+>> ros2 topic info /chatter
+
+	{ ros2 topic info /<topic_name> }
+
+>> ros2 interface show
+
+>> ros2 interface show std_msgs/msg/String
+
+	{ ros2 interface show <type> }
+
+
+
+
+
+------------------------------------------- Publisher and Subscriber -------------------------------------------
+
+Quick overview:
+
+	Node --> A Node is a fundamental unit in ROS 2 that performs computation. (Is a fundamental point where someone can publish or subscribe a topic.)
+
+It can be configured to publish messages, subscribe to topics, or both. Each node is responsible for executing a specific task within a ROS system (e.g., sensor reading, data processing, controlling a robot).
+
+
+Topic --> A Topic is a named communication channel in ROS used for message passing between nodes.
+Topics enable asynchronous, many-to-many communication where:
+
+	=> A Publisher Node sends messages to a specific topic.
+
+	=> A Subscriber Node listens to that topic to receive the messages.
+
+Importantly, the communication is anonymous:
+
+	*** The subscriber does not know which node published the data.
+
+	*** The publisher does not know which nodes are subscribed.
+
+This design allows ROS systems to be modular, scalable, and loosely coupled.
+
+	  Node -1			Topic			     Node-2
+	 _________		  _______________		 _____________
+	| Publish | ------------> | Topic <name>| -------------> | Subscribe |
+	|_________|		  |_____________|	     	 |___________|	
+	     ^								|
+	     |								|
+	     |				Topic				|
+	     |			     ______________			|
+	     |			    |Topic <name>  | 			|
+	     -----------------------|______________|<--------------------	
+
+
+Using Topic we can create a close loop system using nodes.
+
+
+
+-------------------------------------------------- Service -----------------------------------------------------
+
+A Service in ROS 2 provides a synchronous communication mechanism between nodes.
+
+ 
+It is a two-way communication system where one node acts as a service server, and other nodes that require the service function as clients. When a client node requests a service, the server node processes the request and sends the appropriate response back to the client.
+
+synchronous request-response interactions.
+
+	*** One node acts as the Service Server, responsible for providing a specific functionality or processing logic.
+
+	*** Other nodes act as Service Clients, which request that functionality when needed.
+
+When a client node sends a service request:
+
+	*** The server node receives the request.
+
+	*** It processes the request data.
+
+	*** Then it sends a response back to the client.
+	
+let's take some demo:
+
+	Terminal - 1: { work as a Server Node }
+	
+	  Step by step:
+	      {
+		>> ros2 run demo_nodes_
+		>> ros2 run demo_nodes_cpp 
+		>> ros2 run demo_nodes_cpp add_two_ints_server 
+	      }
+	      
+	Terminal - 2: { Cheak is Server node active }
+	
+		>> ros2 node list	
+		
+		 
+	Terminal - 3 : {work as a clint node}
+	 
+	      Step by step:
+	      Ex :
+	       {
+	       
+	 	>> ros2 service
+	 	>> ros2 service list 
+	 	>> ros2 service type /add_two_ints
+	 	>> ros2 interface show example_interfaces/srv/AddTwoInts
+	 	>> ros2 service call /add_two_ints example_interfaces/srv/AddTwoInts "{'a' : 40, 'b' : 30}"
+	 	
+	 	
+ 	       } 
+ 	       or,
+ 	       
+ 	       >> ros2 service call /add_two_ints example_interfaces/srv/AddTwoInts "{'a' : 40, 'b' : 30}"
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+     		

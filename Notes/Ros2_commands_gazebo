@@ -1,0 +1,107 @@
+----------------- install Gazebo in ros2 humble ------------------
+
+https://docs.ros.org/en/humble/Tutorials/Advanced/Simulators/Gazebo/Gazebo.html
+
+https://gazebosim.org/docs/latest/getstarted/
+
+
+
+--------------------------------install old gazebo classic-------------------
+
+
+>> sudo apt install ros-humble-gazebo-*
+>> source /usr/share/gazebo/setup.bash (very very impoartent)
+
+
+  Go to these webside and follow the instructions for install gazebo for your require ubuntu and ros version.
+  
+--------------------------------------------------------------------
+
+
+
+run this command for cheak gazebo is it working correctly ( Gazebo Fortress (recommended if using ROS 2 Humble))
+	
+	>>  ign gazebo shapes.sdf(T-1)  ##### This command will launch both the Sim server and Sim GUI with a world that contains three simple shapes.
+	>> ign topic -l (T-2)
+	
+	>> ign gazebo shapes.sdf -v 4  ##### (Add the -v 4 command line argument to generate error, warning, informational, and debugging messages on the console.)
+	
+	
+	
+-------------------------------------gazebo ign-------------------------------
+	
+	>> ign gazebo empty.sdf
+	      (ign gazebo <file_name>.sdf)
+	      
+	      
+	      
+-----------------------old gazebo (classic)---------------------------------
+
+>> ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(xacro my_car.urdf.xacro)" (T-1)
+>> ros2 launch gazebo_ros gazebo.launch.py (T-2)
+>> ros2 run gazebo_ros spawn_entity.py -topic robot_description -entity my_car (T-3)
+
+
+
+----------------------------------------------Gazebo ign 6---------------------------------------------------------------------------
+
+>> ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(xacro my_car.urdf.xacro)"
+>> ros2 launch ros_gz_sim gz_sim.launch.py gz_args:="empty.sdf -r"
+>> ros2 run ros_gz_sim create -topic robot_description
+
+
+
+
+
+---------------------------------------------------------------------Gazebo Plugin-------------------------------------------------------
+
+A Gazebo Plugin is C++ code that runs inside the Gazebo simulator and controls parts of the simulation — like robots, sensors, motors, etc.
+
+Gazebo Plugins = "Make things happen inside Gazebo"
+
+
+
+-------------------------------------------------Gazebo Ros 2 bridge----------------------------------------------------------------------
+The Gazebo ROS 2 Bridge allows Gazebo to talk to ROS 2 by translating messages between them.
+
+Gazebo ROS 2 Bridge = "Let ROS 2 and Gazebo talk to each other"
+
+	>> gz topic -l  {for see gazebo running topic list}
+	>> gz topic -h  {for seec gazebo running topic list information}
+	>> gz topic -i -t <topic_name>  {For see gazebo specific topic information}
+	(ex : gz topic -i -t /clock)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

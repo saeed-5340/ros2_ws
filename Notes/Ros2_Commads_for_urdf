@@ -1,0 +1,158 @@
+1. Install necessary things:
+	
+	>> sudo apt update
+	>> sudo apt install ros-humble-desktop
+	>> sudo apt-get install ros-humble-rviz2 ros-humble-turtle-tf2-py ros-humble-tf2-ros ros-humble-tf2-tools ros-humble-turtlesim
+	>> ros2 launch turtle_tf2_py turtle_tf2_demo.launch.py (for cheak is it working)
+	>> sudo apt install ros-humble-urdf-tutorial
+	>> source /opt/ros/humble/setup.bash 
+
+
+
+2. Cheak a Demo: 
+	>> sudo apt install ros-humble-urdf-tutorial
+	>> source /opt/ros/humble/setup.bash 
+	>> cd /opt/ros/humble/share/urdf_tutorial/
+	>> ros2 launch urdf_tutorial display.launch.py model:=/opt/ros/humble/share/urdf_tutorial/urdf/07-physics.urdf 
+	>> ros2 run tf2_tools view_frames (create a pdf of transfrom(tf))
+	>> ros2 topic echo /tf
+
+
+
+3. Create a urdf file in a specific folder.
+ 	ex :
+	   >> mkdir URDF_Folder
+	   >> cd URDF_Folder
+	   >> touch my_car.urdf
+
+4. now open the urdf file and write the code inside that
+
+---------------------------------------code structure--------------------------------
+
+( cheak my_car.urdf file and my_car.urdf.xacro file )
+
+	<?xml version="1.0"?>
+	<robot name = "my_car">
+	    # write the all things inside the robot tag
+	</robot>
+
+5. Open in Rivz
+	
+	>> ros2 launch urdf_tutorial display.launch.py model:=/home/saeed/Documents/vscode/URDF_Folder/my_car.urdf
+	>> ros2 run tf2_tools view_frames (create a pdf of transfrom(tf))
+	>> 
+	
+	
+	
+	
+	
+6. Cheak urdf using terminal:
+	>> (run urdf) ex : ros2 launch urdf_tutorial display.launch.py model:=/home/saeed/Documents/vscode/URDF_Folder/joint_cheak.urdf (Terminal-1)
+	>> rqt_graph (Terminal-2)
+	>> ros2 topic list (Terminal - 3)
+	>> ros2 node list (Terminal - 4)
+	>> ros2 param list (Terminal - 5)
+		>> ros2 param list /robot_state_publisher
+		>> ros2 param get /robot_state_publisher robot_description 
+
+		
+	
+
+7. Launch a node robot state publisher:
+	>> ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(xacro /home/saeed/Documents/vscode/URDF_Folder/my_car.urdf)"  -----> using this comnmand urdf pass as a perameter in robot_state_publisher node.
+	
+	>> ros2 run joint_state_publisher_gui joint_state_publisher_gui   -----> publish another node joint_state_publisher_gui. (gui means graphical interface). For visulize use rqt_graph.
+	
+	>> rqt_graph
+	
+	>> ros2 run rviz2 rviz2  ----> ( For visualize 3D )
+	
+	
+
+
+8. For open a previously saved rviz file:
+   >> ros2 run rviz2 rviz2 -d .rviz2/model_robot.rviz 
+   	ros2 run rviz2 rviz2 -d <file_path> 
+
+	
+	
+	
+	
+	
+----------------------------------------------------------------- URDF File Configaretion in a launch file-------------------------------
+
+	1. First create a ros2 package inside main ros2_ws/scr folder.
+		ex : >> ros2 pkg create --build-type ament_cmake my_robot_descirption
+		 
+	2. After that delete install and src folder from there
+		ex : >> rm -rf /install /scr
+	3. create 3 folder 
+		ex : >> mkdir urdf
+		     >> mkdir rviz
+		     >> mkdir launch ( you can handle it from a global launch folder)
+	4. Add launch file in launch folder.
+		ex : >> cd launch 
+		     >> touch disply.launch.xml  or >> touch disply.launch.py
+		     	    (<file_name>.launch.<xml/py>)
+		     	    
+	5. Add urdf file in urdf folder
+		ex : >> cd urdf
+		     >> touch my_car.urdf
+		              (<file_name>.urdf)
+	
+	
+	6. After write urdf file code then add it with launch file and build with using colcon build. After complete that save a desire urdf configaretion file . and thats file need to save in rviz foler. And the configaretion file name should be like this....
+	
+		ex : urdf_config.rviz
+		     <name>_config.rviz
+		     
+		     
+        7. All of file add in launch file.
+        8. Don't forget to add Directory inside install in CMakeLists.txt file
+        	ex : 		install(
+        			   DIRECTORY urdf launch rviz       ----------> DIRECTORY <folder_name> <folder_name> ...  
+  				   DESTINATION share/${PROJECT_NAME}/
+  				   ) 
+        
+        8. Than build ros2_ws using colcon build and source it using source install/setup.bash
+        9. Run the launch file from terminal.	 
+	
+	
+For better understanding you should cheak my_robot_descirption
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+########## How to Publish TFs using URDF and Robot State Publisher ##########
+
+	>> sudo apt install ros-humble-robot-state-publisher ros-humble-xacro ros-humble-joint-state-publisher-gui
+	>> source /opt/ros/humble/setup.bash 
+	>> ros2 run robot_state_publisher robot_state_publisher /home/saeed/Documents/vscode/URDF_Folder/my_car.urdf 
+		      <package_name>        <executable_name>
+	>> rqt_graph
+	>> ros2 run joint_state_publisher_gui joint_state_publisher_gui 
+	>> rqt_graph
+	>> ros2 topic echo /tf
+	>> ros2 run tf2_tools view_frames 
+	>> ros2 run rviz2 rviz2 
+	
+ 
+ 
+ 
+ 
+ 
+ ########### Create xacro Macro #############
+ 	>> cp my_car.urdf my_car.urdf.xacro
+   Add xacro macro in code and after completeing that 
+ 	>> ros2 launch urdf_tutorial display.launch.py model:=/home/saeed/Documents/vscode/URDF_Folder/my_car.urdf.xacro 
+
+
+ 

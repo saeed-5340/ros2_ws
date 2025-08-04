@@ -1,0 +1,138 @@
+-----------------------------------------------------Option 1-----------------------------------------------------------------------------
+
+The structural (Option 1) view of package for ROS 2 in python and C++. These structure is use for beginner level, mini project etc.  
+
+-------------------------------Code Structure For python file---------------------------
+
+my_python_package/
+├── my_python_package/
+│   ├── __init__.py
+│   ├── my_node.py               # Your ROS 2 Python node(s)
+│
+├── launch/
+│   ├── my_launch.py             # Python-based launch file
+│   └── my_launch.xml            # XML-based launch file
+│
+├── config/
+│   ├── rviz_config.rviz         # (Example) RViz config
+│   └── gazebo_config.yaml       # (Example) Gazebo config
+│
+├── resource/
+│   └── my_python_package        # Required for ament (empty file with package name)
+│
+├── setup.py                     # Python setup script
+├── setup.cfg                    # Build metadata
+├── package.xml                  # Package manifest
+├── test/                        # (Optional) for test scripts
+
+
+
+
+-------------------------------Code Structure For C++ file---------------------------
+
+
+my_cpp_package/
+├── src/
+│   └── my_node.cpp              # Your ROS 2 C++ node(s)
+│
+├── include/
+│   └── my_cpp_package/
+│       └── my_node.hpp          # Header file(s)
+│
+├── launch/
+│   ├── my_launch.py             # Python-based launch file
+│   └── my_launch.xml            # XML-based launch file
+│
+├── config/
+│   ├── rviz_config.rviz         # (Example) RViz config
+│   └── gazebo_config.yaml       # (Example) Gazebo config
+│
+├── resource/
+│   └── my_cpp_package           # Required for ament (empty file with package name)
+│
+├── CMakeLists.txt               # CMake build instructions
+├── package.xml                  # Package manifest
+├── test/                        # (Optional) for test scripts
+
+
+
+-----------------------------------------------------Option 2-----------------------------------------------------------------------------
+
+Centralized structure (Option 2) that is ideal for scaling, reuse, and industry-quality projects.
+Below is a well-structured layout of a Balanced Centralized ROS 2 Workspace — which you can memorize, reuse, and build upon for future scalable and professional projects.
+
+ros2_ws/
+├── src/
+│   ├── launch_package/           # 📦 Centralized launch files
+│   │   ├── robot1/
+│   │   │   ├── robot1.launch.py
+│   │   │   └── robot1.launch.xml
+│   │   ├── robot2/
+│   │   │   └── robot2.launch.py
+│   │   └── common/
+│   │       └── bringup.launch.py
+│   │
+│   ├── config_package/           # 📦 Centralized config files
+│   │   ├── robot1/
+│   │   │   ├── urdf/
+│   │   │   │   └── robot1.urdf.xacro
+│   │   │   ├── rviz/
+│   │   │   │   └── robot1.rviz
+│   │   │   └── gazebo/
+│   │   │       └── robot1_gazebo.yaml
+│   │   ├── robot2/
+│   │   │   └── ...
+│   │   └── common/
+│   │       ├── map/
+│   │       ├── params/
+│   │       └── worlds/
+│   │
+│   ├── robot1_package/           # 🤖 Robot 1 software (C++ or Python)
+│   │   ├── src/                  #   For C++ nodes
+│   │   │   └── robot1_node.cpp
+│   │   ├── robot1_package/       #   For Python nodes
+│   │   │   └── robot1_node.py
+│   │   ├── include/
+│   │   ├── CMakeLists.txt
+│   │   ├── package.xml
+│   │   └── setup.py / setup.cfg (if Python)
+│   │
+│   ├── robot2_package/           # 🤖 Robot 2 software
+│   │   └── ...
+│   │
+│   ├── interfaces_package/       # 🔗 Custom msg/srv/action interfaces
+│   │   ├── msg/
+│   │   ├── srv/
+│   │   ├── CMakeLists.txt
+│   │   └── package.xml
+│
+├── install/                      # ✅ Built workspace
+├── build/                        # 🔧 Build cache
+├── log/                          # 📊 Logs
+
+
+colcon build --symlink-install
+source install/setup.bash
+ros2 launch launch_package robot1/robot1.launch.py
+
+
+
+-----------------------------------------Createing a new setup for vscode (Option 2)-----------------------------------
+
+>> mkdir ros2_ws
+>> cd ros2_ws
+	>> mkdir scr
+>> Colcon build --symlink-install
+>> source install/setup.bash
+	>> (cd scr/)
+		>> ros2 pkg create --build-type  ament_cmake launch_package
+		>> rm -rf include/ src/	
+
+
+
+
+
+
+
+
+

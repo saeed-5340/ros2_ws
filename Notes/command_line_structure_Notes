@@ -1,0 +1,3 @@
+-------------- To find executables in a package -------------------
+	>> ros2 pkg executables <package_name>
+	   ( Ex : >> ros2 pkg executables turtlesim )	

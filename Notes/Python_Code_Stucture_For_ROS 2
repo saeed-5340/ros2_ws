@@ -1,0 +1,123 @@
+------------------------------------------python libeary file structure-----------------------------------
+
+                            -------> in every package you will see (__init__.py) file. this file is symbol of package
+                            |                                                           
+Libeary ----------------> package ---------> module -----------> functions
+   |                        |		      |			    |
+   |			    |		      |			    |
+   |			    |		      |			    |
+
+Matplotlib   		  axes 	   	    _subplots	        SubplotBase
+
+if you want call the function of subplot then simply type
+
+>> from matplotlib.axes._subplots import SubplotBase (by doing this you simply call SubplotBsae function from Matplotllib libeary 
+							and you can use this without building this function)
+							
+
+# If you want to call module than simply do..
+
+>> from matplotlib.axes import _subplots
+
+# If you want to call packages than simply do..
+
+>> from matplotlib import axes
+
+# If you want to call libeary than simply do..
+
+>> import matplotlib
+
+Note : you written a code in a .py file. That file name is "script" (it,s not a libeary, not a package,not a module) 
+
+
+
+
+------------------ Folder_Structure --------------------
+
+my_package/
+├── my_package/
+│   ├── __init__.py
+│   ├── my_node.py         # Your ROS 2 node(s)
+│
+├── launch/
+│   └── my_launch.py       # Launch file
+│
+├── config/
+│   ├── rviz_config.rviz   # (Example) RViz config
+│   └── gazebo_config.yaml # (Example) Gazebo config
+│
+├── resource/
+│   └── my_package         # Required for ament (empty file with package name)
+│
+├── setup.py               # Python setup file
+├── setup.cfg              # Metadata
+├── package.xml            # Package manifest
+├── test/                  # (Optional) for test scripts
+
+
+
+
+
+
+
+------------------------------------------- Code_structure (my_node.py) ------------------------------------------------------------
+
+
+
+----> import rcply ( Load the core ROS 2 Python library )
+
+	{ This line imports the core ROS 2 Python client library.
+	  rcply ( ROS Client Library for Python ).
+	  It's provide the tools of
+	   i) initalize ROS 2   ii) Creates nodes iii) Use publishers, subscribers, services, timers, etc.  
+	   
+	  Note : Without this, you can't interact with ROS 2 from Python. }
+	  
+	  
+-----> from rclpy.node import Node (Allow creation of ROS 2 nodes)
+	
+	{ This line imports the base class Node from the rclpy library.
+	
+	Node is the fundamental unit of computation in ROS 2. You inherit from this class to create your own custom nodes.It provides built-in methods to:
+	 		i)   Create publishers and subscribers
+	 		ii)  Set up timers and callbacks
+	 		iii) Log information
+	 		iv)  Manage parameters
+	}
+	
+
+-----> from std_msgs.msg import String  (Use the standard string message for communication)
+
+	{ This line imports the String message type from the std_msgs (Standard Messages) package. }
+	
+	
+	
+	
+	
+---------------------------------------------------Main stucture---------------------------------------------------------
+	
+#!/usr/bin/env python3                ----> { #! — special characters that tell the OS this is an executable script.
+	                              /usr/bin/env — a program that finds the location of the given command (here, python3) based on your
+	                              environment.
+	                              python3 — the interpreter you want to use to run the script.
+	                              
+	                              when you run: (./<code_name.py) (ex : ./my_node.py)
+	                              the OS reads the first line of the file:
+				      It sees #!/usr/bin/env python3 }
+				      
+
+
+import rcply
+	
+def main(args=None)
+	rcply.init(args=args)
+		
+		
+		# Write the Code Here
+	
+		
+	rcply.shutdown() 
+
+if __name__== '__main__'
+    main()
+	
