@@ -1,0 +1,11 @@
+<launch>
+
+<node pkg = "demo_nodes_cpp" exec = "talker" name = "talker_node">
+    <remap from = "/chatter" to = "/my_chatter"/>
+</node>
+
+<node pkg = "demo_nodes_py" exec = "listener" name = "listener_here">
+    <remap from = "/chatter" to = "my_chatter"/>
+</node>
+
+</launch>
