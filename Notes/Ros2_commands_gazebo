@@ -45,9 +45,26 @@ run this command for cheak gazebo is it working correctly ( Gazebo Fortress (rec
 
 ----------------------------------------------Gazebo ign 6---------------------------------------------------------------------------
 
->> ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(xacro my_car.urdf.xacro)"
->> ros2 launch ros_gz_sim gz_sim.launch.py gz_args:="empty.sdf -r"
->> ros2 run ros_gz_sim create -topic robot_description
+here you can see how a robot spawn in gazebo.
+
+1.
+	>> ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(xacro my_car.urdf.xacro)"
+if the folder is not in home dircetory the add the full file path of urdf folder. example:
+	>> ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(xacro Documents/vscode/ros2_ws/scr/my_robot_descirption/urdf/my_car.urdf.xacro)"
+
+2.
+	>> ros2 launch ros_gz_sim gz_sim.launch.py gz_args:="empty.sdf -r"
+if you want to launch your own world then go to that folder where the world sdf folder is. then simply launch the world. example: 
+	
+	>> cd /home/saeed/Downloads/Gazebo_World_needed_Files/World 
+	>> ign gazebo test_world.sdf
+or,
+
+	ros2 launch ros_gz_sim gz_sim.launch.py gz_args:="/home/saeed/Downloads/Gazebo_World_needed_Files/World/test_world.sdf"
+	
+3. launch your robot in gazebo
+
+	>> ros2 run ros_gz_sim create -topic robot_description
 
 
 
@@ -70,6 +87,50 @@ Gazebo ROS 2 Bridge = "Let ROS 2 and Gazebo talk to each other"
 	>> gz topic -h  {for seec gazebo running topic list information}
 	>> gz topic -i -t <topic_name>  {For see gazebo specific topic information}
 	(ex : gz topic -i -t /clock)
+
+
+
+
+run command : >> ros2 topic pub -r 10  cmd_vel geometry_msgs/msg/Twist "{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.5}}"
+	      >> ros2 run teleop_twist_keyboard teleop_twist_keyboard 
+
+
+
+
+
+-----------------------------------------------------------Gazebo World------------------------------------------------------------------
+
+First run gazebo using command 
+		>> ign gazebo empty.sdf
+Then create a world. How to create my own world?
+For example : createing your own world first go to 3 dot of write corner and search Resource Spawner and enter. After that and many thing as you want you can use openrobotics and other libery for doing this work easily you can use google search.
+best option
+
+1. search ---> https://app.gazebosim.org/dashboard 
+2. then you will see a another search option inside these page and search your needed libeary or needed product.
+3. go there and download the file
+4. after download these file extract the file and see the sdf file and dae file.
+5. go to gazebo and see a entity tree and also see a plus sign
+6. click the plus sign ---> mash ---> select your needed (product) dae file and add in gazebo.
+
+
+using this process you can made your own gazebo world and save it as an sdf file.
+
+Connect the gazebo world with your projcet.
+1. you need to copy sdf file and paste that in your project like : ros2_ws--> scr --> (<your_package_name>) ---> create a folder name (world) ---> paste the sdf file in world folder
+
+2. detect the file as a xml file. and add its path in launch file.
+3. save it and go to terminal
+4. and go to ros2_ws and colcon build --symlink-install
+5. and run the launch file.
+
+
+ 
+
+
+
+
+
 
 
 
