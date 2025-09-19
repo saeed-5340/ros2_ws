@@ -4,12 +4,18 @@ https://docs.ros.org/en/humble/Tutorials/Advanced/Simulators/Gazebo/Gazebo.html
 
 https://gazebosim.org/docs/latest/getstarted/
 
+install gazebo hermonic
+
+sudo apt update
+sudo apt install ros-humble-ros-gz-sim
+
 
 
 --------------------------------install old gazebo classic-------------------
 
 
->> sudo apt install ros-humble-gazebo-*
+>> sudo apt install ros-humble-gazebo-* (don't do it first)
+>> sudo apt install ros-humble-gazebo-ros-pkgs
 >> source /usr/share/gazebo/setup.bash (very very impoartent)
 
 
@@ -17,7 +23,15 @@ https://gazebosim.org/docs/latest/getstarted/
   
 --------------------------------------------------------------------
 
+-----------Some importtant installation------------------------------
 
+sudo apt install ros-humble-navigation2
+sudo apt install ros-humble-nav2-bringup
+sudo apt install ros-humble-ros-ign-gazebo
+sudo apt install ros-humble-ros-ign-bridge
+sudo apt install ros-humble-ros-gz-sim ros-humble-ros-gz-bridge ros-humble-ros-gz-interfaces -y
+
+-------------------------------------------------------------
 
 run this command for cheak gazebo is it working correctly ( Gazebo Fortress (recommended if using ROS 2 Humble))
 	
@@ -60,13 +74,15 @@ if you want to launch your own world then go to that folder where the world sdf 
 	>> ign gazebo test_world.sdf
 or,
 
-	ros2 launch ros_gz_sim gz_sim.launch.py gz_args:="/home/saeed/Downloads/Gazebo_World_needed_Files/World/test_world.sdf"
+	>> ros2 launch ros_gz_sim gz_sim.launch.py gz_args:="/home/saeed/Downloads/Gazebo_World_needed_Files/World/test_world.sdf"
+	
+	>> ros2 launch gazebo_ros gazebo.launch.py world:=$(ros2 pkg prefix gazebo_ros)/share/gazebo_ros/worlds/empty.world (For gazebo classic gazebo-11.10.2)
+
 	
 3. launch your robot in gazebo
 
 	>> ros2 run ros_gz_sim create -topic robot_description
-
-
+	
 
 
 
@@ -81,7 +97,7 @@ Gazebo Plugins = "Make things happen inside Gazebo"
 -------------------------------------------------Gazebo Ros 2 bridge----------------------------------------------------------------------
 The Gazebo ROS 2 Bridge allows Gazebo to talk to ROS 2 by translating messages between them.
 
-Gazebo ROS 2 Bridge = "Let ROS 2 and Gazebo talk to each other"
+Gazebo ROS 2 Bridge = "ROS 2 and Gazebo talk to each other"
 
 	>> gz topic -l  {for see gazebo running topic list}
 	>> gz topic -h  {for seec gazebo running topic list information}
@@ -126,8 +142,6 @@ Connect the gazebo world with your projcet.
 
 
  
-
-
 
 
 

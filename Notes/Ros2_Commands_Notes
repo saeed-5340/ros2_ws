@@ -99,7 +99,8 @@ For creating node for using these node let's introduce with some command:
 								"test_node = my_package.my_node:main"
 							   ]
 								# "executable_name = <package_name>.<file_name>:<function>" 
-		
+						
+		>> source install/setup.bash
 		>> ros2 run my_package test_node { this only run when test_node is add inside console_scripts }
 	}
  

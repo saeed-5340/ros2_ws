@@ -79,7 +79,7 @@
 	
 	
 	
------------------------------------------------------------------ URDF File Configaretion in a launch file-------------------------------
+--------------------------------------------- URDF File Configaretion in a launch file----------------------------------
 
 	1. First create a ros2 package inside main ros2_ws/scr folder.
 		ex : >> ros2 pkg create --build-type ament_cmake my_robot_descirption

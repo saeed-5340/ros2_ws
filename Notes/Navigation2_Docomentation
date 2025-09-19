@@ -1,0 +1,215 @@
+--------------------------------------------Setup and Installation-------------------------------------------------
+
+prequation ---> first install ros2 
+
+>> sudo apt install ros-humble-navigation2 ros-humble-nav2-bringup ros-humble-turtlebot3
+>> sudo apt install python3-colcon-common-extensions
+>> sudo apt install git
+>> sudo apt install terminator (very useful tools)
+>> sudo apt install ros-humble-navigation2 ros-humble-nav2-bringup ros-humble-turtlebot3*
+
+
+------------------------------------------------------------------
+
+>> gedit ~/.bshre
+	add a line (export TURTLEBOT3_MODEL=waffle)
+>> source .bashrc
+>> printenv | grep TURTLEBOT3
+
+
+---------------------------------------------------------------generate mapping---------------------------------------
+
+>> ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py        // start turtlebot3 world in ghazebo
+>> ros2 launch turtlebot3_cartographer cartographer.launch.py use_sim_time:=True    // start a rviz to get these world map using lider
+
+>> ros2 run turtlebot3_teleop teleop_keyboard			   // for control the turtlebot3 using keyboard. and visit the whole
+								      area for mapping
+								      
+								      
+>> ros2 run nav2_map_server map_saver_cli -f /home/saeed/Documents/vscode/maps/turtlebot3_world_map
+  	{ For saving map in a folder write the command in linux terminal }
+  		after of the map file you see two file .pmg and .yaml file.
+  		yaml describe the image charectersics. let us run an another command
+  		>> cd /home/saeed/Documents/vscode/maps
+  		>> nano turtlebot3_world_map.pgm
+  			{nano <file_name>}
+
+
+
+
+----------------------------------for navigation-----------------------
+/// don't know why use
+>> sudo apt install ros-humble-rmw-cyclonedds-cpp
+>> gedit .bashrc
+>> export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
+
+>> cd /opt/ros/humble/share/turtlebot3_navigation2/param/
+>> ls
+>> sudo gedit waffle.yaml 
+	After open this delete a line add a new there
+	-----> robot_model_type: "differential" {delete this line or comment this line}
+	-----> robot_model_type: "nav2_amcl::DifferentialMotionModel" {Add this line there}
+
+
+----------------------------------Now lest's Start navigation---------------------------------
+
+>> ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py 
+
+>> ros2 launch turtlebot3_navigation2 navigation2.launch.py use_sim_time:=True map:=/home/saeed/Documents/vscode/maps/turtlebot3_world_map.yaml
+
+First, select the bot position in map and it must be aline point with gazebo (for simulation) in real robot it need to be aline with robot position. In Rivz2 set a navigation point (Nav2 Goal). and also cheak the waypoint navigation(passes all point sequantly) and Nav Through poses(set a path 1st and last point and go if there is any point in middle then reached that otherwise skip these point.)
+
+
+
+
+
+
+----------------------------------------------------------ROS2 Navigation Stack-------------------------------------------------------------
+
+When you have navigation goal then global planner comute a path using global cost map and then transfer these path into local planner then local planner or controller which are mainly resposnsible for moving robot. Also local planner compute path cost.
+
+-------------------------------How map Works------------------------------------------------------
+
+There are two planner in map local and global planer. When we get the data and create a map then gobal planner create a map view after thet when we give a point where the robot need to reached then active the local planner and continously operate. First it cheak sefty mergin.
+
+===> Then robot estimate the cost of every path and try to reached there in minimum path cost.
+--------------Global planner--------------
+	Low cost estimate using color. low cost sequence
+			
+			white (lowest cost)
+			  |
+			  |
+			Blue
+			  |
+			  |
+			 Red
+			  |
+			  |
+			 cyne (highest cost very close to obstacle)
+			 
+		
+----------------Local Planner--------------
+
+Use same color code as Global planner. Local planner continuously calculate the cost. Global planner set a path after thet local planner continuously these path cost is it get low cost in that path then it choose that path.
+
+
+---------> Local planner give data 20 Hz - 30 Hz frequency.
+---------> Local planner give data 1 Hz - 2 Hz frequency.
+
+
+------------------------------------------ Parameter --------------------------------
+
+For changing perameter you need to open rqt (rqt is a GUI framework that is able to load various plug-in tools as dockable windows. There are currently no plug-ins selected. To add plug-ins, select items from the Plugins menu)
+
+Let's see
+
+
+>> ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py 
+
+>> ros2 launch turtlebot3_navigation2 navigation2.launch.py use_sim_time:=True map:=/home/saeed/Documents/vscode/maps/turtlebot3_world_map.yaml
+
+>> rqt
+
+	{In rqt go to Plugin -----> configure ------> Dynamic Reconfigure.}
+							{Inside this you can change or custom paremeter as you want.Some important parameter
+							 are Gobal costmap(inflation_layer,inflation_radius etc), Local costmap. Cheak all
+							  things that you customize.}
+							
+
+
+----------------------------------------------------------------------------
+
+### Need to know about odem,base_footprint and map Freams. (very Importent)
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+For launch turtlebot in your environment first create a workspace in of turtlebot3 and clone it from git. after properly woking turtlebot3 from workspace then create your own world in gazebo and save it.After that save the world file in world folder inside turtlebot3.
+
+ex.
+>> ~/Documents/vscode/turtlebot3_ws/src/turtlebot3_simulations/turtlebot3_gazebo/worlds
+
+And open that folder and add a line in first and save it.
+<?xml version="1.0"?>
+
+After completeing these work go to launch file inside turtlebot3.
+ex.
+>> ~/Documents/vscode/turtlebot3_ws/src/turtlebot3_simulations/turtlebot3_gazebo/launch
+
+and type command 
+
+>> cp turtlebot3_house.launch.py turtlebot3_my_home.launch.py
+
+open your new copied python file and change its world.
+Ex.
+	   world = os.path.join(
+		get_package_share_directory('turtlebot3_gazebo'),
+		'worlds',
+		'turtlebot3_my_home.world'
+			(change only this name. here you written your world name and save it.)
+			
+ after that go to turtlebot3_ws.
+Ex. 
+
+>> cd ~/Documents/vscode/turtlebot3_ws
+>> colcon build --symlink-install
+>> source install/setup.bash
+
+launch turlebot3 in your world
+
+>> ros2 launch turtlebot3_gazebo turtlebot3_my_home.launch.py
+
+
+
+>> mkdir turtlebot3_ws
+>> cd turtlebot3_ws
+>> mkdir src
+>> cd src
+>> cd ~/Documents/vscode/turtlebot3_ws/src
+>> git clone -b humble https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
+		>> git clone https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git (not recomended)
+		>> git checkout -b humble-devel (not recomended)
+
+>> cd ..
+>> colcon build --symlink-install
+>> export TURTLEBOT3_MODEL=waffle
+>> ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+
+
+
+
+
+
+
+
+ros2 run rplidar_ros rplidar_composition --ros-args -p serial_port:=/dev/ttyUSB0 -p frame_id:=lidar_link -p angle_compensate:=true -p scan_mode:=Standard
+
+ros2 launch slam_toolbox online_async_launch.py params_file:=/home/saeed/Documents/vscode/ros2_ws/scr/small_bot/config/mapper_params_online_async.yaml use_sim_time:=false
+
+ros2 launch slam_toolbox online_async_launch.py params_file:=/home/saeed/Documents/vscode/ros2_ws/scr/small_bot/config/mapper_params_online_async.yaml use_sim_time:=false
+
+sudo usermod -a -G dialout saeed 
+
+sudo chmod 666 /dev/ttyUSB0 
+
+
+
+
+
+
+
+
+
+
+
+
+
