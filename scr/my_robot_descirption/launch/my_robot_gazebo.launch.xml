@@ -9,8 +9,22 @@
         <param name = "robot_description" value = "$(command 'xacro $(var urdf_path)')"/>
     </node>
 
+    <!-- <node
+        pkg="rplidar_ros"
+        exec="rplidar_composition"
+        output="screen">
+        
+        <param name="serial_port" value="/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.3:1.0-port0"/>
+        <param name="frame_id" value="laser_frame"/>
+        <param name="angle_compensate" value="true"/>
+        <param name="scan_mode" value="Standard"/>
+        
+    </node> -->
+
 
     <include file = "$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
+        <!-- <arg name = "gz_args" value = "$(find-pkg-share small_bot)/worlds/house_world.sdf"/> -->
+        <!-- <arg name = "gz_args" value = "$(find-pkg-share my_robot_descirption)/world/test_world.sdf -r"/> -->
         <arg name = "gz_args" value = "empty.sdf -r"/>
     </include>
 

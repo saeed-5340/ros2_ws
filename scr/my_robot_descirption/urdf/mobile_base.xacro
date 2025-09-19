@@ -31,7 +31,7 @@
                            o_xyz = "0 0 ${radius}" o_rpy = "0 0 0"/>
     </link>
 
-    <link name ="lider_link">
+    <link name ="lidar_link">
         <visual>
             <geometry>
                 <cylinder radius = "${radius}" length = "${length}"/>
@@ -39,6 +39,14 @@
             <origin xyz = "0 0 0" rpy = "0 0 0"/>
             <material name = "white"/>
         </visual>
+        <!-- <collision>
+            <geometry>
+                <cylinder radius = "${radius}" length = "${length}"/>
+            </geometry>
+            <origin xyz = "0 0 0" rpy = "0 0 0"/>
+        </collision>
+        <xacro:wheel m = "1.0" r = "${radius}" h = "${length}"
+                             o_xyz = "0 0 0" o_rpy = "0 0 0"/> -->
     </link>
 
 
@@ -94,9 +102,9 @@
         <origin xyz = "0 0 ${radius}" rpy = "0 0 0"/>
     </joint>
 
-    <joint name = "base_lider_joint" type = "fixed">
+    <joint name = "base_lidar_joint" type = "fixed">
         <parent link = "base_link"/>
-        <child link = "lider_link"/>
+        <child link = "lidar_link"/>
         <origin xyz = "0 0 ${base_height + length / 2.0}" rpy = "0 0 0"/>
     </joint>
 
