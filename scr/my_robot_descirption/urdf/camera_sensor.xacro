@@ -6,7 +6,7 @@
     <xacro:property name = "camera_height" value = "0.08"/>
 
 
-    <link name = "camera_lin">
+    <link name = "camera_link">
         <visual>
             <geometry>
                 <box size = "${camera_len} ${camera_width} ${camera_height}"/>
@@ -26,7 +26,7 @@
 
     <joint name  = "camera_link_joint" type = "fixed">
         <parent link = "base_link"/>
-        <child link = "camera_lin"/>
+        <child link = "camera_link"/>
         <origin xyz = "${base_len / 2} 0 ${base_height / 2}" rpy = "0 0 0"/>
         <axis xyz = "0 1 0"/>
     </joint>
