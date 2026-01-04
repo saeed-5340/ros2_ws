@@ -1,0 +1,28 @@
+<launch>
+    <!-- Set URDF path -->
+   <let name = "urdf_path" value = "$(find-pkg-share sam_drone)/urdf/sam_drone.urdf.xacro"/>
+
+    <let name = "robot_rviz_path" value = "$(find-pkg-share sam_drone)/config/urdf_config.rviz"/>
+
+
+    <!-- 1. Run robot_state_publisher with URDF -->
+    <node pkg="robot_state_publisher" exec="robot_state_publisher">
+        <param name="robot_description" value="$(command 'xacro $(var urdf_path)')"/>
+    </node>
+    <include file="$(find-pkg-share gazebo_ros)/launch/gazebo.launch.py">
+    <!-- <include file = "$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py"> -->
+        <!-- <arg name = "gz_args" value = "empty.sdf -r"/> -->
+          <!-- <arg name = "world" value = "$(find-pkg-share small_bot)/worlds/house_world.sdf"/> -->
+        <!-- <arg name="world" value="$(find-pkg-share my_robot_descirption)/world/test_world.sdf"/> -->
+        <!-- <arg name="gz_args" value="$(find-pkg-share sam_drone)/worlds/world_1.sdf"/> -->
+        <arg name="use_sim_time" value="true"/>
+    </include>
+
+    <!-- 3. Spawn robot into Gazebo -->
+    <node pkg="gazebo_ros" exec="spawn_entity.py"
+          args="-topic robot_description -entity sam_drone"/>
+
+    <!-- 4. Start RViz -->
+    <node pkg="rviz2" exec="rviz2" output="screen"
+          args="-d $(var robot_rviz_path)"/>
+</launch>
