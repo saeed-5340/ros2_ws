@@ -1,0 +1,60 @@
+---------------------- Install Arduino ------------------------------
+
+python3 -m pip install pyserial       				# Make sure pserial libery is installed
+mkdir Arduino
+cp ~/Downloads/arduino-ide_2.3.6_Linux_64bit.AppImage ~/Arduino/
+cd Arduino/
+ls -la
+sudo add-apt-repository universe
+sudo apt install libfuse2
+ls -la
+chmod +x arduino-ide_2.3.6_Linux_64bit.AppImage
+lsusb   							(Bus 003 Device 007: ID 10c4:ea60 Silicon Labs CP210x UART Bridge)
+ls -la /dev | grep ttyACM
+ls -la /dev | grep ttyUSB
+sudo usermod -a -G dialout saeed
+sudo chmod a+rw /dev/ttyUSB0 
+ls -la /dev | grep ttyUSB0
+cd Arduino
+./arduino-ide_2.3.6_Linux_64bit.AppImage
+
+	
+		[ 	>> sudo apt install gedit
+			>> cd ~/.local/share/application
+			>> gedit arduino.desktop
+	[Desktop Entry]
+	Type =Application
+	Name =Arduino IDE 2.3.6
+	Exec =/home/saeed/Arduino/arduino-ide_2.3.6_Linux_64bit.AppImage
+
+		]
+		
+
+setup arduino ide add prefarance,esp32 liberay, add micro-ros zip library
+
+
+
+---------------setup micro-ros-----------------------------
+mkdir micro_ros2
+cd micro_ros2
+mkdir src
+cd src
+git clone -b $ROS_DISTRO https://github.com/micro-ROS/micro_ros_setup.git
+cd ..
+ls -la
+sudo apt install python3-rosdep2
+sudo apt update && rosdep update
+rosdep install --from-paths src --ignore-src -y
+sudo apt-get install python3-pip
+colcon build
+source install/local_setup.bash
+ros2 run micro_ros_setup create_agent_ws.sh
+ros2 run micro_ros_setup build_agent.sh
+source install/local_setup.bash
+ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyUSB0
+
+
+/home/saeed/.arduino15/packages/esp32/tools/esptool_py/5.1.0/esptool --port /dev/ttyACM0 --baud 921600 flash-id
+
+
+
