@@ -17,6 +17,10 @@ find_package(rosidl_default_generators REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/TargetCoordinate.msg"  # don't add (,) coma here
   "srv/MyService.srv"  # add your service file here
+  "srv/AddTwoNum.srv"
+  "srv/EvenOdd.srv"
+  "action/UntilCount.action"
+  "action/CarPosition.action"
   # you can add multiple message files here
   DEPENDENCIES geometry_msgs  # add dependencies here if needed 
 )

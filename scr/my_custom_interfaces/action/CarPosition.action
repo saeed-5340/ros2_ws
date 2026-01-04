@@ -1,0 +1,10 @@
+# Goal
+int64 position
+int64 velocity
+---
+# result
+int64 destination_position
+string massage
+---
+# feedback
+int64 current_position
